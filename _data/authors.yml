@@ -1,12 +1,12 @@
-ghost:
-  username: ghost
-  name: Ghost
-  url_full: http://jekyller.github.io/jasper2/
-  url: jekyller.github.io/jasper2
-  bio: The professional publishing platform
+akurniawan:
+  username: akurniawan
+  name: Aditya Kurniawan
+  url_full: http://akurniawan.github.io
+  url: akurniawan.github.io
+  bio: Student in Erasmus Mundus program. Currently studying in University of Malta and will go to Charles University in Pragueu next. Heavily invested in understanding better about NLP and language in general.
   picture: assets/images/ghost.png
-  facebook: ghost
-  twitter: tryghost
+  # facebook: ghost
+  twitter: akurnia_1
   cover: False
 hannah:
   username: hannah
