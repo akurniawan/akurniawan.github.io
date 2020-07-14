@@ -11,7 +11,7 @@ baseurl: /
 # Website info
 title: Aditya Kurniawan
 description: Wrangling about NLP, Machine Learning, and Personal Growth
-cover: assets/images/blog-cover.png
+cover: assets/images/blog-cover.jpg
 logo: #assets/images/blog-icon.png
 logo_dark: assets/images/favicon.png
 favicon: favicon.png
