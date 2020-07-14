@@ -4,7 +4,7 @@ current: post
 cover: assets/images/posts/language-model/awd-arch.png
 navigation: True
 title: Indonesian Language Model
-tags: [nlp, language-model, representation-learning]
+tags: [advanced-nlp, language-model, representation-learning]
 class: post-template
 subclass: 'post'
 author: akurniawan
