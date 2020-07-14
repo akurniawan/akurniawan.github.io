@@ -2,10 +2,10 @@
 
 <feed xmlns="http://www.w3.org/2005/Atom" >
   <generator uri="https://jekyllrb.com/" version="3.8.7">Jekyll</generator>
-  <link href="http://localhost:4000/tag/advanced-nlp/feed.xml" rel="self" type="application/atom+xml" />
-  <link href="http://localhost:4000/" rel="alternate" type="text/html" />
-  <updated>2020-07-14T17:08:45+07:00</updated>
-  <id>http://localhost:4000/tag/advanced-nlp/feed.xml</id>
+  <link href="/https://akurniawan.github.io/tag/advanced-nlp/feed.xml" rel="self" type="application/atom+xml" />
+  <link href="/https://akurniawan.github.io/" rel="alternate" type="text/html" />
+  <updated>2020-07-14T18:45:51+07:00</updated>
+  <id>/https://akurniawan.github.io/tag/advanced-nlp/feed.xml</id>
 
   
   
@@ -33,11 +33,11 @@
   
     <entry>
       <title type="html">Indonesian Language Model</title>
-      <link href="http://localhost:4000/indonesian-language-model" rel="alternate" type="text/html" title="Indonesian Language Model" />
+      <link href="/https://akurniawan.github.io/indonesian-language-model" rel="alternate" type="text/html" title="Indonesian Language Model" />
       <published>2018-12-11T00:00:00+07:00</published>
       <updated>2018-12-11T00:00:00+07:00</updated>
-      <id>http://localhost:4000/indonesian-language-model</id>
-      <content type="html" xml:base="http://localhost:4000/indonesian-language-model">&lt;h1 id=&quot;lingua&quot;&gt;Lingua&lt;/h1&gt;
+      <id>/https://akurniawan.github.io/indonesian-language-model</id>
+      <content type="html" xml:base="/https://akurniawan.github.io/indonesian-language-model">&lt;h1 id=&quot;lingua&quot;&gt;Lingua&lt;/h1&gt;
 &lt;p&gt;NLP (Natural Language Processing) has been proven useful for many industrial practitioners to gain insight and automate human-intensive labor in order to bring a better experience for their customers. Chatbot to quickly reply customers’ inquiries and free text search engine to help customers express their intent towards our product in more flexible way are a few examples of the use cases.&lt;/p&gt;
 
 &lt;p&gt;When dealing with text data, the representation of the text itself is one of the central components to build NLP applications. Recent state-of-the-art of text representations have been powered by word2vec and its variants that were first popularised by &lt;a href=&quot;https://arxiv.org/abs/1301.3781&quot;&gt;Mikolov et al. 2013&lt;/a&gt;. However, as an Indonesian-based technology company, Traveloka deals with a high volume of Indonesian text. Due to the fact that Indonesian is considered as one of the low-resource languages, not much work has been done in text representation for this language.&lt;/p&gt;
