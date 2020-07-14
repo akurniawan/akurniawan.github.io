@@ -10,7 +10,7 @@ baseurl: /
 
 # Website info
 title: grokkingnlp
-description: Wrangling about NLP and Machine Learning
+description: Wrangling about NLP, Machine Learning, and Life
 cover: assets/images/blog-cover.jpg
 logo: #assets/images/blog-icon.png
 logo_dark: assets/images/favicon.png
