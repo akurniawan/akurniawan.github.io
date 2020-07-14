@@ -5,8 +5,9 @@ akurniawan:
   # url: akurniawan.github.io
   url_full: False
   url: False
-  bio: Student in Erasmus Mundus program. Will start studying in University of Malta and move to Charles University in Pragueu for my second year. Heavily invested in understanding better about NLP and language in general.
-  picture: assets/images/ghost.png
+  # bio: Student in Erasmus Mundus program. Will start studying in University of Malta and move to Charles University in Pragueu for my second year. Heavily invested in understanding better about NLP and language in general.
+  bio: Senior Data Scientist in NLP working @ Traveloka
+  picture: assets/images/suitup.png
   facebook: False
   twitter: akurnia_1
   cover: False
