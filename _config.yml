@@ -28,8 +28,8 @@ email: akurniawan.cs@gmail.com
 linkedin: akurniawan25
 
 # Disqus
-disqus: False
-disqus_shortname: # replace with your disqus username
+disqus: True
+disqus_shortname: akurniawan-github-io-1 # replace with your disqus username
 
 # Google Analytics
 google_analytics: UA-171726969-1
