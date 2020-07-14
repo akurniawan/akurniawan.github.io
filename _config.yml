@@ -14,7 +14,7 @@ description: Wrangling about NLP and Machine Learning
 cover: assets/images/blog-cover.jpg
 logo: assets/images/blog-icon.png
 logo_dark: assets/images/favicon.png
-favicon: assets/images/favicon.png
+favicon: favicon.png
 CNAME: akurniawan.github.io #add cname for website to be created
 
 # Social info
@@ -42,8 +42,8 @@ permalink: /:title
 # Tags' info in `_data/tags_info.yml`
 
 # gems and other configs
-plugins_dir: [_plugins]
-plugins: [jekyll-paginate, jekyll-feed]
+plugins_dir: "_plugins"
+plugins: ["jekyll-paginate", "jekyll-feed"]
 
 feed:
   path: feed.xml
