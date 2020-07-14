@@ -9,9 +9,9 @@ words_per_minute: 200
 baseurl: /
 
 # Website info
-title: akurniawan
+title: Aditya Kurniawan
 description: Wrangling about NLP, Machine Learning, and Personal Growth
-cover: assets/images/blog-cover.jpg
+cover: assets/images/blog-cover.png
 logo: #assets/images/blog-icon.png
 logo_dark: assets/images/favicon.png
 favicon: favicon.png
