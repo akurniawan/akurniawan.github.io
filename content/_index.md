@@ -1,5 +1,5 @@
 ---
-title: "Aditya Kurniawan"
+title: "Aditya Kurniawan (Akur)"
 description: "Applied Scientist @ Inception - G42. Grokking NLP, Machine Learning, and Personal Growth"
 ---
 
