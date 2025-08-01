@@ -1,0 +1,87 @@
+baseURL: "https://akurniawan.github.io/"
+languageCode: "en-us"
+title: "Aditya Kurniawan"
+
+# Theme
+theme: "typo"
+
+# Content configuration
+pagination:
+  pagerSize: 10
+
+# Markup configuration
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
+  highlight:
+    style: "github"
+    lineNos: true
+
+# Menu configuration (Typo theme specific)
+# Remove the Hugo menu section and use params.menu instead
+
+# Site parameters for Typo theme
+params:
+  # Site description
+  description: "Grokking NLP, Machine Learning, and Personal Growth"
+
+  # Author information (simplified for Typo theme)
+  author: "Aditya Kurniawan"
+
+  # Social links
+  social:
+    - name: "github"
+      url: "https://github.com/akurniawan"
+    - name: "twitter"
+      url: "https://twitter.com/akurnia_1"
+    - name: "linkedin"
+      url: "https://linkedin.com/in/akurniawan25"
+    - name: "email"
+      url: "mailto:akurniawan.cs@gmail.com"
+
+    # Theme specific settings
+  math: false
+  showWordCount: true
+  showReadingTime: true
+  showLastMod: true
+
+  # Enable post summaries/descriptions
+  listSummaries: true
+
+  # Fix pagination - override the default of 1 post per page
+  paginationSize: 10
+
+  # Show posts on homepage
+  homeCollection: "posts"
+  homeCollectionTitle: "Recent Posts"
+
+  # Comments
+  comments:
+    enabled: true
+    disqus:
+      shortname: "akurniawan-github-io-1"
+
+  # Analytics
+  analytics:
+    google: "UA-171726969-1"
+
+  # Menu configuration for Typo theme
+  menu:
+    - name: "posts"
+      url: "/posts/"
+    - name: "about"
+      url: "/about/"
+    - name: "library"
+      url: "/library/"
+
+# Taxonomies
+taxonomies:
+  tag: "tags"
+  category: "categories"
+
+# Output formats
+outputs:
+  home: ["HTML", "RSS"]
+  page: ["HTML"]
+  section: ["HTML", "RSS"]
