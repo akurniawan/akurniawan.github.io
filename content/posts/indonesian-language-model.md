@@ -6,6 +6,7 @@ tags: ["advanced-nlp", "language-model", "representation-learning"]
 categories: ["nlp", "research"]
 description: "Building Indonesian language models using AWD-LSTM for natural language processing applications at Traveloka"
 summary: "A deep dive into building state-of-the-art Indonesian language models using AWD-LSTM architecture. This post covers the challenges of working with low-resource languages, implementation details, and experimental results from production systems at Traveloka."
+toc: true
 ---
 
 # Lingua

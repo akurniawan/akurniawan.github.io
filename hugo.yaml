@@ -33,8 +33,6 @@ params:
   social:
     - name: "github"
       url: "https://github.com/akurniawan"
-    - name: "twitter"
-      url: "https://twitter.com/akurnia_1"
     - name: "linkedin"
       url: "https://linkedin.com/in/akurniawan25"
     - name: "email"
@@ -43,8 +41,9 @@ params:
     # Theme specific settings
   math: false
   showWordCount: true
-  showReadingTime: true
+  readTime: true
   showLastMod: true
+  showTags: true
 
   # Enable post summaries/descriptions
   listSummaries: true
@@ -65,6 +64,9 @@ params:
   # Analytics
   analytics:
     google: "UA-171726969-1"
+
+  # Hide footer completely
+  showFooter: false
 
   # Menu configuration for Typo theme
   menu:
