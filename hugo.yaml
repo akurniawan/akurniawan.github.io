@@ -26,6 +26,9 @@ params:
   # Site description
   description: "Grokking NLP, Machine Learning, and Personal Growth"
 
+  # Favicon path
+  faviconPath: "/favicon/"
+
   # Author information (simplified for Typo theme)
   author: "Aditya Kurniawan"
 
