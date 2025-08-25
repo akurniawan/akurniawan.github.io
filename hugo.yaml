@@ -16,7 +16,8 @@ markup:
       unsafe: true
   highlight:
     style: "github"
-    lineNos: true
+    lineNos: false
+    noClasses: false
 
 # Menu configuration (Typo theme specific)
 # Remove the Hugo menu section and use params.menu instead
