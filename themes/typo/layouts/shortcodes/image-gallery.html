@@ -1,0 +1,150 @@
+{{/* Image Gallery Shortcode
+Usage: {{< image-gallery>}}
+    {{< figure src="/path/to/image1.png" caption="Caption 1">}}
+        {{< figure src="/path/to/image2.png" caption="Caption 2">}}
+            {{< figure src="/path/to/image3.png" caption="Caption 3">}}
+                {{< /image-gallery>}}
+                    */}}
+
+                    <div class="image-gallery">
+                        {{ .Inner | markdownify }}
+                    </div>
+
+                    <style>
+                        .image-gallery {
+                            display: grid;
+                            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                            gap: 1rem;
+                            margin: 2rem 0;
+                        }
+
+                        .image-gallery figure {
+                            cursor: pointer;
+                            transition: transform 0.2s ease-in-out;
+                            border-radius: 8px;
+                            overflow: hidden;
+                            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+                        }
+
+                        .image-gallery figure:hover {
+                            transform: scale(1.02);
+                            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+                        }
+
+                        .image-gallery .img-container {
+                            position: relative;
+                        }
+
+                        .image-gallery img {
+                            width: 100%;
+                            height: auto;
+                            display: block;
+                        }
+
+                        /* Lightbox styles */
+                        .lightbox {
+                            display: none;
+                            position: fixed;
+                            z-index: 9999;
+                            left: 0;
+                            top: 0;
+                            width: 100%;
+                            height: 100%;
+                            background-color: rgba(0, 0, 0, 0.9);
+                            backdrop-filter: blur(5px);
+                        }
+
+                        .lightbox-content {
+                            position: absolute;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%, -50%);
+                            max-width: 90%;
+                            max-height: 90%;
+                        }
+
+                        .lightbox img {
+                            width: auto;
+                            max-width: 100%;
+                            max-height: 90vh;
+                            display: block;
+                            margin: 0 auto;
+                        }
+
+                        .lightbox-caption {
+                            color: white;
+                            text-align: center;
+                            margin-top: 1rem;
+                            font-size: 1.1rem;
+                        }
+
+                        .close-lightbox {
+                            position: absolute;
+                            top: 20px;
+                            right: 30px;
+                            color: white;
+                            font-size: 40px;
+                            font-weight: bold;
+                            cursor: pointer;
+                            z-index: 10000;
+                        }
+
+                        .close-lightbox:hover {
+                            color: #ccc;
+                        }
+
+                        /* Responsive adjustments */
+                        @media (max-width: 768px) {
+                            .image-gallery {
+                                grid-template-columns: 1fr;
+                            }
+                        }
+                    </style>
+
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            // Create lightbox container
+                            const lightbox = document.createElement('div');
+                            lightbox.className = 'lightbox';
+                            lightbox.innerHTML = `
+    <span class="close-lightbox">&times;</span>
+    <div class="lightbox-content">
+      <img src="" alt="">
+      <div class="lightbox-caption"></div>
+    </div>
+  `;
+                            document.body.appendChild(lightbox);
+
+                            // Add click handlers to gallery images
+                            const galleryImages = document.querySelectorAll('.image-gallery figure');
+                            galleryImages.forEach(figure => {
+                                figure.addEventListener('click', function () {
+                                    const img = this.querySelector('img');
+                                    const caption = this.querySelector('figcaption');
+
+                                    lightbox.querySelector('img').src = img.src;
+                                    lightbox.querySelector('img').alt = img.alt;
+                                    lightbox.querySelector('.lightbox-caption').textContent = caption ? caption.textContent : '';
+
+                                    lightbox.style.display = 'block';
+                                    document.body.style.overflow = 'hidden';
+                                });
+                            });
+
+                            // Close lightbox
+                            lightbox.addEventListener('click', function (e) {
+                                if (e.target === lightbox || e.target.className === 'close-lightbox') {
+                                    lightbox.style.display = 'none';
+                                    document.body.style.overflow = 'auto';
+                                }
+                            });
+
+                            // Close on escape key
+                            document.addEventListener('keydown', function (e) {
+                                if (e.key === 'Escape' && lightbox.style.display === 'block') {
+                                    lightbox.style.display = 'none';
+                                    document.body.style.overflow = 'auto';
+                                }
+                            });
+                        });
+                    </script>
