@@ -35,13 +35,13 @@ This journey combines my background in ML with the fascinating world of financia
 ## This Blog
 
 Here, I share insights about:
+- GPU and CPU performance work — profiling, benchmarking, and the traps in both
+- Quantitative finance, from market data analysis to system design
 - Technical deep-dives into NLP and ML
 - Building agentic LLM systems for investment and finance
-- Algorithmic trading strategies and HFT system design
-- Lessons learned in industry AI development  
+- Low-level programming in C++ and CUDA
+- Lessons learned in industry AI development
 - Career growth and personal development
-- The intersection of research and practical applications
-- Low-level programming optimization for financial systems
 
 ## Let's Connect
 

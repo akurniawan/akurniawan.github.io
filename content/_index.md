@@ -1,8 +1,8 @@
 ---
 title: "Aditya Kurniawan (Akur)"
-description: "Applied Scientist @ Inception - G42. Grokking NLP, Machine Learning, and Personal Growth"
+description: "Applied Scientist @ Inception - G42. Machine learning, systems performance, and quantitative finance."
 ---
 
-Hi there! I'm **Aditya Kurniawan**, an Applied Scientist at [Inception - G42](https://g42.ai/), specializing in Natural Language Processing and Machine Learning.
+Hi there! I'm **Aditya Kurniawan**, an Applied Scientist at [Inception - G42](https://g42.ai/), where I build agentic LLM systems for investment workflows.
 
-This is my personal blog where I share insights about NLP, machine learning research, and thoughts on personal growth. You'll find content ranging from technical deep-dives to reflections on building a career in AI.
+I write here about whatever I'm working through at the time. Lately that means GPU and CPU performance work in C++ and CUDA, quantitative finance, and the NLP and machine learning I came from. Mostly measured experiments rather than tutorials, with the numbers left in.
