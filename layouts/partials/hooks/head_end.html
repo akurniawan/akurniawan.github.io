@@ -1,0 +1,15 @@
+{{/*
+  GoatCounter analytics.
+
+  Inactive until you set `goatcounter` in hugo.yaml:
+
+      params:
+        goatcounter: "yourcode"      # from https://yourcode.goatcounter.com
+
+  Only loads on production builds, so `hugo server` does not pollute the stats.
+  No cookies, so no consent banner is required.
+*/}}
+{{ if and hugo.IsProduction site.Params.goatcounter }}
+<script data-goatcounter="https://{{ site.Params.goatcounter }}.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
+{{ end }}
