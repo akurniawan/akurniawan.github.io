@@ -1,6 +1,6 @@
 ---
 title: "Aditya Kurniawan (Akur)"
-description: "Taking things apart to find out why they're slow. GPU profiling, CPU caches, and the occasional Hidden Markov Model."
+description: "Taking things apart to find out why they're slow. GPU profiling, CPU caches, and market data that won't behave."
 ---
 
 Hi, I'm **Aditya Kurniawan** — Akur to most people.
