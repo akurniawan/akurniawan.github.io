@@ -15,8 +15,8 @@ markup:
     renderer:
       unsafe: true
   highlight:
-    style: "github"
-    lineNos: true
+    style: "algol"
+    lineNos: false
 
 # Menu configuration (Typo theme specific)
 # Remove the Hugo menu section and use params.menu instead
@@ -24,7 +24,11 @@ markup:
 # Site parameters for Typo theme
 params:
   # Site description
-  description: "Grokking NLP, Machine Learning, and Personal Growth"
+  description: "Machine learning, systems performance, and quantitative finance. Measured experiments, with the numbers left in."
+
+  # Analytics: GoatCounter (cookieless). Rendered by
+  # layouts/partials/hooks/head_end.html, production builds only.
+  goatcounter: "akurniawan"
 
   # Favicon path
   faviconPath: "/favicon/"
@@ -64,9 +68,6 @@ params:
     disqus:
       shortname: "akurniawan-github-io-1"
 
-  # Analytics
-  analytics:
-    google: "UA-171726969-1"
 
   # Hide footer completely
   showFooter: false
