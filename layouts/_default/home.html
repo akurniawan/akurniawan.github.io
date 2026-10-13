@@ -1,0 +1,39 @@
+{{ define "main" }}
+{{ $posts := where site.RegularPages "Section" "posts" }}
+
+<section class="section hero">
+  <p class="label"><span class="sigil">~</span> whoami</p>
+  <h1>{{ site.Params.author }}<span class="aka">({{ site.Params.brand | default "akur" }})</span></h1>
+
+  <div class="intro">
+    {{ .Content }}
+  </div>
+
+  {{ $tags := slice }}
+  {{ range first 14 site.Taxonomies.tags.ByCount }}{{ $tags = $tags | append .Name }}{{ end }}
+  {{ partial "chips.html" (dict "tags" $tags) }}
+
+  <ul class="links">
+    {{ range site.Params.social }}
+    <li><a href="{{ .url | safeURL }}" {{ if not (hasPrefix .url "mailto:") }}target="_blank" rel="noopener noreferrer me"{{ end }}><span class="br">[</span>{{ .name }}<span class="br">]</span></a></li>
+    {{ end }}
+    {{ with .OutputFormats.Get "rss" }}
+    <li><a href="{{ .RelPermalink }}"><span class="br">[</span>rss<span class="br">]</span></a></li>
+    {{ end }}
+  </ul>
+</section>
+
+<section class="section">
+  <h2 class="prompt"><span class="sigil">$</span>ls -t posts/ | head</h2>
+  <ul class="rows">
+    {{ range first 10 $posts }}
+    {{ partial "post-row.html" (dict "page" .) }}
+    {{ end }}
+  </ul>
+  {{ if gt (len $posts) 10 }}
+  <a class="more" href="{{ "/posts/" | relURL }}">… {{ sub (len $posts) 10 }} more &rarr;</a>
+  {{ else }}
+  <a class="more" href="{{ "/posts/" | relURL }}">all posts by category &rarr;</a>
+  {{ end }}
+</section>
+{{ end }}

@@ -1,0 +1,4 @@
+{{/* Overrides the typo theme's stylesheet bundle with the terminal theme. */}}
+{{ $css := resources.Get "css/terminal.css" | minify | fingerprint }}
+<link rel="preload" href="/fonts/jetbrains-mono/jetbrains-mono-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}" media="all">

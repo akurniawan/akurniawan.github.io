@@ -1,0 +1,75 @@
+{{ define "main" }}
+{{ $isPost := eq .Section "posts" }}
+{{ $file := "" }}
+{{ with .File }}{{ $file = path.Join .Dir .LogicalName }}{{ end }}
+
+<article class="post">
+  <header class="post-head">
+    <p class="crumb"><span class="sigil">$</span>cat
+      <a href="{{ "/" | relURL }}">~</a>/
+      {{- with .Parent }}{{ if not .IsHome }}<a href="{{ .RelPermalink }}">{{ path.Base .RelPermalink }}</a>/{{ end }}{{ end -}}
+      {{- with .File }}{{ .LogicalName }}{{ end }}
+    </p>
+
+    {{ if $isPost }}
+    <h1 class="post-title">{{ .Title }}</h1>
+    {{ with .Params.summary }}<p class="post-summary">{{ . | markdownify }}</p>{{ end }}
+
+    <p class="post-meta">
+      {{- $fmt := "2006-01-02" -}}
+      <time datetime="{{ .Date.Format "2006-01-02T15:04:05-07:00" }}">{{ .Date.Format $fmt }}</time>
+      {{- if .Param "readTime" }}<span class="sep">·</span>{{ .ReadingTime }} min read{{ end }}
+      {{- if .Param "showWordCount" }}<span class="sep">·</span>{{ lang.FormatNumber 0 .WordCount }} words{{ end }}
+      {{- if and (.Param "showLastMod") (ne (.Lastmod.Format $fmt) (.Date.Format $fmt)) }}<span class="sep">·</span>updated {{ .Lastmod.Format $fmt }}{{ end }}
+    </p>
+
+    {{ if .Param "showTags" }}
+    {{ with .Params.tags }}{{ partial "chips.html" (dict "tags" .) }}{{ end }}
+    {{ end }}
+    {{ end }}
+  </header>
+
+  {{ if and (.Param "toc") (gt (len .Fragments.Headings) 0) }}
+  <details class="toc" open>
+    <summary>contents</summary>
+    {{ .TableOfContents }}
+  </details>
+  {{ end }}
+
+  <div class="prose">
+    {{ if and (not $isPost) (not (strings.HasPrefix (strings.TrimSpace .RawContent) "# ")) }}
+    <h1>{{ .Title }}</h1>
+    {{ end }}
+    {{ .Content }}
+  </div>
+
+  {{ if and $isPost (not (.Param "hidePagination")) }}
+  {{ with or .PrevInSection .NextInSection }}
+  <nav class="post-nav" aria-label="More posts">
+    {{ with $.PrevInSection }}
+    <a class="prev" href="{{ .RelPermalink }}"><span class="dir">&larr; older</span><span class="t">{{ .Title }}</span></a>
+    {{ end }}
+    {{ with $.NextInSection }}
+    <a class="next" href="{{ .RelPermalink }}"><span class="dir">newer &rarr;</span><span class="t">{{ .Title }}</span></a>
+    {{ end }}
+  </nav>
+  {{ end }}
+  {{ end }}
+
+  {{ if .Store.Get "hasMermaid" }}
+  {{ $mermaidDarkTheme := default "dark" (or .Params.mermaidDarkTheme .Site.Params.mermaidDarkTheme) }}
+  {{ $mermaidTheme := default "default" (or .Params.mermaidTheme .Site.Params.mermaidTheme) }}
+  <script defer type="module" id="mermaid_script"
+    data-light-theme="{{ $mermaidTheme }}" data-dark-theme="{{ $mermaidDarkTheme }}"
+    src='{{ "js/mermaid.js" | relURL }}'></script>
+  {{ end }}
+
+  <div class="statusline" aria-hidden="true">
+    <span class="mode" data-mode="NORMAL">NORMAL</span>
+    <span class="file">{{ $file | default .RelPermalink }}</span>
+    {{ with .Params.tags }}<span class="ft">{{ index . 0 }}</span>{{ end }}
+    <span class="enc">utf-8</span>
+    <span class="pos">Top</span>
+  </div>
+</article>
+{{ end }}

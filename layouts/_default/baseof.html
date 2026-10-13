@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="{{ or site.Language.LanguageCode site.Language.Lang }}"
+  dir="{{ or site.Language.LanguageDirection `ltr` }}">
+
+<head>
+  {{/* Set the palette before first paint. Saved choice wins, else the OS preference. */}}
+  <script>
+    (function () {
+      var t;
+      try { t = localStorage.getItem("theme"); } catch (e) {}
+      if (["gruvbox", "paper", "nord"].indexOf(t) < 0) {
+        t = matchMedia("(prefers-color-scheme: light)").matches ? "paper" : "gruvbox";
+      }
+      document.documentElement.dataset.theme = t;
+    })();
+  </script>
+  {{ partial "head.html" . }}
+</head>
+
+<body id="top">
+  <a class="sr-only" href="#content">skip to content</a>
+
+  <header class="site-header">
+    {{ partial "header.html" . }}
+  </header>
+
+  <main class="main" id="content">
+    <div class="wrap">
+      {{ block "main" . }}{{ end }}
+    </div>
+  </main>
+
+  {{/* Body end hook */}}
+  {{ partial "functions/get_hook.html" (dict "hook" "body_end" "context" .) }}
+
+  <footer class="site-footer">
+    {{ partial "footer.html" . }}
+  </footer>
+
+  {{ if .Param "math" }}
+  {{ partialCached "math.html" . }}
+  {{ end }}
+
+  <script src="{{ "js/terminal.js" | relURL }}"></script>
+  <script defer src="{{ "js/copy-code.js" | relURL }}"></script>
+</body>
+</html>

@@ -15,7 +15,8 @@ markup:
     renderer:
       unsafe: true
   highlight:
-    style: "algol"
+    # Emit CSS classes; colors live in assets/css/terminal.css so they follow the :theme palette.
+    noClasses: false
     lineNos: false
 
 # Menu configuration (Typo theme specific)
@@ -35,6 +36,9 @@ params:
 
   # Author information (simplified for Typo theme)
   author: "Aditya Kurniawan"
+
+  # Short handle shown as the header brand and next to the name on the homepage
+  brand: "akur"
 
   # Social links
   social:

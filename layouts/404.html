@@ -1,0 +1,15 @@
+{{ define "main" }}
+<div class="notfound">
+  <h1 class="sr-only">Page not found</h1>
+  <div class="tilde" aria-hidden="true">~<br>~<br>~</div>
+  <p class="msg">"<span data-path>this page</span>" [New]</p>
+  <p class="err">E484: Can't open file</p>
+  <ul class="cmds">
+    <li><a href="{{ "/" | relURL }}">:e ~/</a> <span class="hint">" go home</span></li>
+    <li><a href="{{ "/posts/" | relURL }}">:e posts/</a> <span class="hint">" list every post</span></li>
+  </ul>
+</div>
+<script>
+  document.querySelector("[data-path]").textContent = location.pathname;
+</script>
+{{ end }}

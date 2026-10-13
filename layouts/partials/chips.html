@@ -1,0 +1,15 @@
+{{/* Tag chips with cycling terminal colors. Pass (dict "tags" <slice of names> "counts" <optional map>). */}}
+{{ $colors := slice "green" "aqua" "yellow" "orange" "blue" "purple" "red" }}
+{{ $counts := .counts }}
+<ul class="chips">
+  {{ range $i, $t := .tags }}
+  {{ with site.GetPage (printf "/tags/%s" ($t | urlize)) }}
+  <li>
+    <a class="chip c-{{ index $colors (mod $i (len $colors)) }}" href="{{ .RelPermalink }}">
+      {{- lower .LinkTitle -}}
+      {{ with $counts }}<span class="count">{{ index . $t }}</span>{{ end }}
+    </a>
+  </li>
+  {{ end }}
+  {{ end }}
+</ul>

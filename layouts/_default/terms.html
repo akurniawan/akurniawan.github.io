@@ -1,0 +1,23 @@
+{{ define "main" }}
+<p class="crumb"><span class="sigil">$</span>ls {{ .Data.Plural }}/</p>
+<h1 class="sr-only">{{ .Title }}</h1>
+
+{{ $names := slice }}
+{{ $counts := dict }}
+{{ range .Data.Terms.ByCount }}
+{{ $names = $names | append .Name }}
+{{ $counts = merge $counts (dict .Name .Count) }}
+{{ end }}
+
+<div class="terms" style="margin-top: 1.5rem">
+  {{ if eq .Data.Plural "tags" }}
+  {{ partial "chips.html" (dict "tags" $names "counts" $counts) }}
+  {{ else }}
+  <ul class="chips">
+    {{ range .Data.Terms.ByCount }}
+    <li><a class="chip c-green" href="{{ .Page.RelPermalink }}">{{ lower .Page.LinkTitle }}<span class="count">{{ .Count }}</span></a></li>
+    {{ end }}
+  </ul>
+  {{ end }}
+</div>
+{{ end }}

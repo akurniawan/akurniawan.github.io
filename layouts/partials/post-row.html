@@ -1,0 +1,12 @@
+{{/* One line per post: date, title, reading time. Pass (dict "page" $p "summary" bool). */}}
+{{ $p := .page }}
+<li class="row">
+  <a href="{{ $p.RelPermalink }}">
+    <time datetime="{{ $p.Date.Format "2006-01-02" }}">{{ $p.Date.Format "2006-01-02" }}</time>
+    <span class="title">{{ $p.Title }}</span>
+    <span class="len">{{ $p.ReadingTime }}m</span>
+    {{ if .summary }}
+    {{ with $p.Params.summary | default $p.Summary }}<span class="summary">{{ . | plainify }}</span>{{ end }}
+    {{ end }}
+  </a>
+</li>

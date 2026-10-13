@@ -1,0 +1,39 @@
+{{ define "main" }}
+{{ $isPosts := or (eq .Section "posts") (eq .Data.Plural "categories") }}
+
+<p class="crumb"><span class="sigil">$</span>
+  {{- if eq .Kind "term" -}}
+  ls posts/ | grep {{ if eq .Data.Plural "tags" }}"#{{ lower .Title }}"{{ else }}{{ lower .Title }}{{ end }}
+  {{- else -}}
+  ls -t {{ lower .Title }}/
+  {{- end -}}
+</p>
+
+<header class="list-head">
+  <h1 class="sr-only">{{ .Title }}</h1>
+  {{ with .Content }}<div class="prose">{{ . }}</div>{{ end }}
+</header>
+
+{{ if $isPosts }}
+{{ partial "filters.html" . }}
+{{ end }}
+
+{{ $paginator := .Paginate .Pages (site.Params.paginationSize | default 10) }}
+<ul class="rows">
+  {{ range $paginator.Pages }}
+  {{ partial "post-row.html" (dict "page" . "summary" true) }}
+  {{ end }}
+</ul>
+
+{{ if gt $paginator.TotalPages 1 }}
+<nav class="pager" aria-label="Pagination">
+  <span>{{ with $paginator.Prev }}<a href="{{ .URL }}">&larr; newer</a>{{ end }}</span>
+  <span>{{ $paginator.PageNumber }}/{{ $paginator.TotalPages }}</span>
+  <span>{{ with $paginator.Next }}<a href="{{ .URL }}">older &rarr;</a>{{ end }}</span>
+</nav>
+{{ end }}
+
+{{ if eq .Kind "term" }}
+<a class="more" href="{{ .Parent.RelPermalink }}">&larr; all {{ .Data.Plural }}</a>
+{{ end }}
+{{ end }}
