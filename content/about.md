@@ -2,12 +2,12 @@
 title: "About"
 date: 2020-07-14
 draft: false
-description: "About Aditya Kurniawan - Applied Scientist @ Inception - G42"
+description: "About Aditya Kurniawan"
 ---
 
 # About Me
 
-Hi! I'm **Aditya Kurniawan**, an Applied Scientist at [Inception](https://www.inceptioniai.org/) - [G42](https://g42.ai/), where I work on cutting-edge Natural Language Processing and Machine Learning research and applications. Currently, I'm heavily focused on the investment domain, building agentic LLM systems for sovereign funds in Abu Dhabi.
+Hi! I'm **Aditya Kurniawan**. I work on cutting-edge Natural Language Processing and Machine Learning research and applications. Currently, I'm heavily focused on the investment domain, building agentic LLM systems for sovereign funds in Abu Dhabi.
 
 ## What I Do
 
@@ -17,10 +17,6 @@ I specialize in:
 - **Machine Learning Research** - Exploring new approaches to text understanding and generation
 - **Technical Leadership** - Bridging the gap between research and production systems
 - **Quantitative Finance** - Currently diving deep into algorithmic trading and high-frequency trading (HFT) systems using low-level languages like C++
-
-## My Journey
-
-Previously, I worked as a Senior Data Scientist at [Traveloka](https://www.traveloka.com/), where I led NLP initiatives for one of Southeast Asia's largest travel platforms. My work focused on building Indonesian language models and deploying ML systems at scale.
 
 ## Current Learning
 
