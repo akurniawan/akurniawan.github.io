@@ -7,7 +7,7 @@ description: "About Aditya Kurniawan"
 
 # About Me
 
-Hi! I'm **Aditya Kurniawan**. I work on cutting-edge Natural Language Processing and Machine Learning research and applications. Currently, I'm heavily focused on the investment domain, building agentic LLM systems for sovereign funds in Abu Dhabi.
+Hi! I'm **Aditya Kurniawan**. I work on cutting-edge Natural Language Processing and Machine Learning research and applications. Currently, I'm building agentic LLM systems for the investment domain.
 
 ## What I Do
 
