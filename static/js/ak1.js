@@ -171,14 +171,14 @@
     // Visitors per hour (written at build time from GoatCounter); the latest hour in accent.
     var vis = $('[data-hud="visitors"]', hud);
     if (vis) {
-      var series = vis.dataset.series.split(",").map(Number);
+      var series = vis.dataset.series ? vis.dataset.series.split(",").map(Number) : [];
       var vctx = vis.getContext("2d");
       var vdpr = window.devicePixelRatio || 1;
       vis.width = 96 * vdpr;
       vis.height = 22 * vdpr;
       vctx.scale(vdpr, vdpr);
       var drawVis = function () {
-        var w = 96, h = 22, n = series.length, top = Math.max.apply(null, series) || 1;
+        var w = 96, h = 22, n = series.length || 1, top = Math.max.apply(null, series.concat(1));
         var bw = w / n;
         vctx.clearRect(0, 0, w, h);
         vctx.fillStyle = css("--line");

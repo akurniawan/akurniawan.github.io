@@ -19,13 +19,20 @@
     <span class="cell opt2" title="How much slower jumping through memory was than reading in order, measured on this device by the front-page cache test">
       <span class="k">cache test</span><span class="v acc" data-hud="bench">–</span>
     </span>
-    {{ with hugo.Data.visitors }}{{ if .hourly }}
-    <span class="cell vis" title="Visitors per hour over the last {{ .window_h }} hours ({{ lang.FormatNumber 0 .window_total }} in total), and every visitor since tracking began. From GoatCounter, refreshed hourly; last update {{ .updated }}.">
-      <span class="k">visitors · {{ .window_h }} h</span>
-      <span class="v acc">{{ lang.FormatNumber 0 .total }}</span>
+    {{ $v := hugo.Data.visitors }}
+    {{ if and $v $v.hourly }}
+    <span class="cell vis" title="Visitors per hour over the last {{ $v.window_h }} hours ({{ lang.FormatNumber 0 $v.window_total }} in total), and every visitor since tracking began. From GoatCounter, refreshed hourly; last update {{ $v.updated }}.">
+      <span class="k">visitors · {{ $v.window_h }} h</span>
+      <span class="v acc">{{ lang.FormatNumber 0 $v.total }}</span>
     </span>
-    <canvas class="spark vis" data-hud="visitors" data-series="{{ delimit .hourly "," }}" width="96" height="22" aria-hidden="true"></canvas>
-    {{ end }}{{ end }}
+    <canvas class="spark vis" data-hud="visitors" data-series="{{ delimit $v.hourly "," }}" width="96" height="22" aria-hidden="true"></canvas>
+    {{ else }}
+    <span class="cell vis" title="Visitor counts come from GoatCounter at build time. They appear once the GOATCOUNTER_TOKEN secret is set for the deploy workflow.">
+      <span class="k">visitors · 48 h</span>
+      <span class="v">–</span>
+    </span>
+    <canvas class="spark vis" data-hud="visitors" data-series="" width="96" height="22" aria-hidden="true"></canvas>
+    {{ end }}
     {{ if and .IsPage (eq .Section "posts") }}
     <span class="keys"><span class="more"><kbd>[</kbd><kbd>]</kbd> section · <kbd>t</kbd> theme · </span><kbd>?</kbd> keys</span>
     {{ else }}
