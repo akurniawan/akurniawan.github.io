@@ -19,7 +19,7 @@
     <span class="cell opt2" title="How much slower jumping through memory was than reading in order, measured on this device by the front-page cache test">
       <span class="k">cache test</span><span class="v acc" data-hud="bench">–</span>
     </span>
-    {{ with site.Data.visitors }}{{ if .hourly }}
+    {{ with hugo.Data.visitors }}{{ if .hourly }}
     <span class="cell vis" title="Visitors per hour over the last {{ .window_h }} hours ({{ lang.FormatNumber 0 .window_total }} in total), and every visitor since tracking began. From GoatCounter, refreshed hourly; last update {{ .updated }}.">
       <span class="k">visitors · {{ .window_h }} h</span>
       <span class="v acc">{{ lang.FormatNumber 0 .total }}</span>
