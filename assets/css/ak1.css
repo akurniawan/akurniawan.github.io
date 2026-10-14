@@ -650,6 +650,11 @@ kbd {
   max-width: 62ch;
 }
 
+.bench .desc b {
+  font-weight: 500;
+  color: var(--ink);
+}
+
 .bench .desc a {
   text-decoration: underline;
   text-decoration-color: var(--accent);
@@ -1633,6 +1638,7 @@ pre:hover .copy-code-button,
 
 .hud .keys {
   margin-left: auto;
+  white-space: nowrap;
   font-size: 11px;
   color: var(--ink-3);
 }
@@ -1718,6 +1724,12 @@ pre:hover .copy-code-button,
 .chroma :is(.gp, .go) { color: var(--ink-3); }
 
 /* ---------- narrower screens ---------- */
+
+@media (max-width: 1520px) {
+  .hud .keys .more {
+    display: none;
+  }
+}
 
 @media (max-width: 1100px) {
   .hero,
@@ -1879,7 +1891,8 @@ pre:hover .copy-code-button,
   }
 
   .hud .keys,
-  .hud .opt2 {
+  .hud .opt2,
+  .hud .vis {
     display: none;
   }
 }

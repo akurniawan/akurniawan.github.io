@@ -168,6 +168,32 @@
     if (document.readyState === "complete") navTiming();
     else window.addEventListener("load", function () { setTimeout(navTiming, 0); });
 
+    // Visitors per hour (written at build time from GoatCounter); the latest hour in accent.
+    var vis = $('[data-hud="visitors"]', hud);
+    if (vis) {
+      var series = vis.dataset.series.split(",").map(Number);
+      var vctx = vis.getContext("2d");
+      var vdpr = window.devicePixelRatio || 1;
+      vis.width = 96 * vdpr;
+      vis.height = 22 * vdpr;
+      vctx.scale(vdpr, vdpr);
+      var drawVis = function () {
+        var w = 96, h = 22, n = series.length, top = Math.max.apply(null, series) || 1;
+        var bw = w / n;
+        vctx.clearRect(0, 0, w, h);
+        vctx.fillStyle = css("--line");
+        for (var dx = 0; dx < w; dx += 3) vctx.fillRect(dx, h - 1, 1.5, 1);
+        series.forEach(function (v, i) {
+          if (!v) return;
+          var bh = Math.max(1.5, v / top * (h - 3));
+          vctx.fillStyle = i === n - 1 ? css("--accent") : css("--ink-3");
+          vctx.fillRect(i * bw, h - 1 - bh, Math.max(1, bw - 0.6), bh);
+        });
+      };
+      themeHandlers.push(drawVis);
+      drawVis();
+    }
+
     var savedRatio = store("ak1-bench");
     if (savedRatio) hudSet("bench", savedRatio + "×");
   }
@@ -574,7 +600,7 @@
       running = true;
       runBtn.disabled = true;
       stateEl.textContent = "warming up";
-      verdict.textContent = "Running. The first pass touches the memory and lets the JIT compile both loops; it is not timed.";
+      verdict.textContent = "Running. The warm-up passes aren't timed; they let the browser compile the loops and load the memory.";
       var url = URL.createObjectURL(new Blob([src], { type: "text/javascript" }));
       var w = new Worker(url);
       w.onmessage = function (e) {
@@ -594,14 +620,14 @@
         var worst = Math.max(rcv, ccv);
         stateEl.textContent = "done · " + new Date().toTimeString().slice(0, 8);
         if (worst > 0.05) {
-          verdict.innerHTML = '<span class="warn">cv ' + (worst * 100).toFixed(1) +
-            "% &gt; 5%</span>: the repetitions disagree too much to trust a " + ratio.toFixed(1) +
-            "× difference. A browser can't pin the worker to one core, so on a phone or a laptop with fast and " +
+          verdict.innerHTML = '<span class="warn">Too noisy: spread ' + (worst * 100).toFixed(1) +
+            "% &gt; 5%</span>. The samples disagree too much to trust the " + ratio.toFixed(1) +
+            "× result. A browser can't pin the worker to one core, so on a phone or a laptop with fast and " +
             "efficient cores it can migrate mid-run, the effect " + (bench.dataset.ref || "the benchmarking note") +
             " §1 is about. Close other tabs and rerun.";
         } else {
-          verdict.innerHTML = "Columns are <b>" + ratio.toFixed(1) + "×</b> slower than rows on this device. " +
-            "Worst cv " + (worst * 100).toFixed(1) + "%, under the 5% line, so the ratio holds.";
+          verdict.innerHTML = "On this device, jumping around memory was <b>" + ratio.toFixed(1) + "× slower</b> than reading it in order. " +
+            "Spread " + (worst * 100).toFixed(1) + "%, under the 5% line, so the number holds.";
           store("ak1-bench", ratio.toFixed(1));
           hudSet("bench", ratio.toFixed(1) + "×");
         }

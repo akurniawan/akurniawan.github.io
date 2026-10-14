@@ -94,26 +94,31 @@
   {{ $bm := site.GetPage "/posts/how-i-benchmark" }}
   <section class="panel bench" aria-labelledby="bench-h" data-bench data-ref="{{ with $bm }}AN-{{ partialCached "sheet/an.html" . .RelPermalink }}{{ else }}the benchmarking note{{ end }}">
     <div class="panel-h">
-      <span class="t" id="bench-h"><span class="dot"></span>bench · this device</span>
+      <span class="t" id="bench-h"><span class="dot"></span>cache test · running on your device</span>
       <span class="bench-ctl">
         <span class="bench-state" data-bench-state>idle</span>
         <button class="chip" type="button" data-bench-run>run</button>
       </span>
     </div>
     <div class="panel-b">
+      {{ $ref := "the benchmarking note" }}{{ with $bm }}{{ $ref = printf "AN-%s" (partialCached "sheet/an.html" . .RelPermalink) }}{{ end }}
       <p class="desc">
-        The row-versus-column walk from {{ with $bm }}<a href="{{ .RelPermalink }}">AN-{{ partialCached "sheet/an.html" . .RelPermalink }}</a>{{ else }}the benchmarking note{{ end }},
-        running in a worker on your device right now: a 2048 × 2048 int32 matrix (16 MiB), summed along rows and then
-        down columns, 15 interleaved samples of 4 passes each, median reported. A browser can't pin a core, so the spread
-        decides whether to believe it.
+        Your browser is repeating the experiment from {{ with $bm }}<a href="{{ .RelPermalink }}">{{ $ref }}</a>{{ else }}{{ $ref }}{{ end }} right now.
+        It reads the same 16 MiB of memory twice: once <b>in order</b>, and once <b>jumping 8 KiB at a time</b>.
+        Jumping defeats the CPU cache, so it is slower. The question is by how much, on whatever you are reading this on.
       </p>
-      <div class="bench-rows" role="table" aria-label="Benchmark results">
-        <div class="bench-row head" role="row"><span role="columnheader">walk</span><span role="columnheader">median, scaled</span><span class="r" role="columnheader">median</span><span class="r cv" role="columnheader">cv</span></div>
-        <div class="bench-row" role="row" data-bench-row="rows"><span role="cell">rows</span><span class="bar" role="cell"><i></i></span><span class="r" role="cell" data-v>–</span><span class="r cv" role="cell" data-cv>–</span></div>
-        <div class="bench-row slow" role="row" data-bench-row="cols"><span role="cell">columns</span><span class="bar" role="cell"><i></i></span><span class="r" role="cell" data-v>–</span><span class="r cv" role="cell" data-cv>–</span></div>
+      <div class="bench-rows" role="table" aria-label="Cache test results">
+        <div class="bench-row head" role="row"><span role="columnheader">read</span><span role="columnheader">time per pass</span><span class="r" role="columnheader">median</span><span class="r cv" role="columnheader">cv</span></div>
+        <div class="bench-row" role="row" data-bench-row="rows"><span role="cell">in order</span><span class="bar" role="cell"><i></i></span><span class="r" role="cell" data-v>–</span><span class="r cv" role="cell" data-cv>–</span></div>
+        <div class="bench-row slow" role="row" data-bench-row="cols"><span role="cell">jumping</span><span class="bar" role="cell"><i></i></span><span class="r" role="cell" data-v>–</span><span class="r cv" role="cell" data-cv>–</span></div>
       </div>
-      <p class="bench-verdict" data-bench-verdict aria-live="polite">Waiting for the page to go idle before running.</p>
-      <p class="note">For reference, {{ with $bm }}AN-{{ partialCached "sheet/an.html" . .RelPermalink }}{{ else }}the benchmarking note{{ end }} measured columns 5.4× slower than rows on a GB10 performance core and 18× slower on an efficiency core.</p>
+      <p class="bench-verdict" data-bench-verdict aria-live="polite">Starts once the page has finished loading.</p>
+      <p class="note">
+        Method: a 2048 × 2048 int32 matrix summed along rows, then down columns, in a background worker. Three untimed
+        warm-ups, then 15 interleaved samples of 4 passes; median reported. cv is the spread between samples: above 5%
+        the run can't be trusted, and a browser can't pin itself to one core.
+        For reference, {{ $ref }} measured jumping 5.4× slower on a GB10 performance core and 18× slower on an efficiency core.
+      </p>
       <noscript><p class="note">The bench needs JavaScript.</p></noscript>
     </div>
   </section>
