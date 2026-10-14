@@ -1,0 +1,28 @@
+{{/* Live measurements of this page, taken in the reader's browser by js/ak1.js. */}}
+<div class="hud" role="region" aria-label="Live measurements of this page in your browser">
+  <div class="wrap">
+    <span class="cell"><span class="id"><span class="dot"></span>{{ site.Params.partNumber | default "AK-1" }} live</span></span>
+    <span class="cell" title="Time between animation frames on this page, last 2 seconds">
+      <span class="k">frame p50 / p99</span>
+      <span class="v" data-hud="frame">– / –<span class="u"> ms</span></span>
+    </span>
+    <canvas class="spark" data-hud="spark" width="96" height="22" aria-hidden="true"></canvas>
+    <span class="cell opt" title="Navigation start to load event">
+      <span class="k">load</span><span class="v" data-hud="load">–</span>
+    </span>
+    <span class="cell opt" title="Bytes over the network for this page and its resources">
+      <span class="k">transfer</span><span class="v" data-hud="xfer">–</span>
+    </span>
+    <span class="cell opt2" title="Logical cores reported by your browser">
+      <span class="k">cores</span><span class="v" data-hud="cores">–</span>
+    </span>
+    <span class="cell opt2" title="Column walk ÷ row walk, measured on this device by the front-page bench">
+      <span class="k">col / row</span><span class="v acc" data-hud="bench">–</span>
+    </span>
+    {{ if and .IsPage (eq .Section "posts") }}
+    <span class="keys"><kbd>[</kbd><kbd>]</kbd> section · <kbd>t</kbd> theme · <kbd>?</kbd> keys</span>
+    {{ else }}
+    <span class="keys"><kbd>j</kbd><kbd>k</kbd> select · <kbd>↵</kbd> open · <kbd>t</kbd> theme · <kbd>?</kbd> keys</span>
+    {{ end }}
+  </div>
+</div>

@@ -1,0 +1,10 @@
+{{ $current := . }}
+<ul class="filters" aria-label="Filter by category">
+  <li class="lbl">application</li>
+  {{ with site.GetPage "/posts" }}
+  <li><a href="{{ .RelPermalink }}" {{ if eq $current.RelPermalink .RelPermalink }}aria-current="page"{{ end }}>all<span class="c">{{ len .RegularPages }}</span></a></li>
+  {{ end }}
+  {{ range site.Taxonomies.categories.ByCount }}
+  <li><a href="{{ .Page.RelPermalink }}" {{ if eq $current.RelPermalink .Page.RelPermalink }}aria-current="page"{{ end }}>{{ lower .Page.LinkTitle }}<span class="c">{{ .Count }}</span></a></li>
+  {{ end }}
+</ul>

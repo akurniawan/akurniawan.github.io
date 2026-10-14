@@ -1,4 +1,5 @@
-{{/* Overrides the typo theme's stylesheet bundle with the terminal theme. */}}
-{{ $css := resources.Get "css/terminal.css" | minify | fingerprint }}
-<link rel="preload" href="/fonts/jetbrains-mono/jetbrains-mono-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+{{/* Overrides the typo theme's stylesheet bundle with the AK-1 instrument theme. */}}
+{{ $css := resources.Get "css/ak1.css" | minify | fingerprint }}
+<link rel="preload" href="/fonts/plex/ibm-plex-sans-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="/fonts/plex/ibm-plex-mono-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}" media="all">

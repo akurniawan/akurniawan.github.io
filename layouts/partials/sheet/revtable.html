@@ -1,0 +1,26 @@
+{{/* Revision history table. Pass (dict "pages" <posts> "abstracts" bool). */}}
+<table class="dt rev" data-rows>
+  <thead>
+    <tr>
+      <th class="an" scope="col">AN</th>
+      <th scope="col">Date</th>
+      <th scope="col">Change</th>
+      <th class="cat" scope="col">Category</th>
+      <th class="r" scope="col">min</th>
+    </tr>
+  </thead>
+  <tbody>
+    {{ range .pages }}
+    <tr data-href="{{ .RelPermalink }}">
+      <td class="an">{{ partialCached "sheet/an.html" . .RelPermalink }}</td>
+      <td class="date"><time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time></td>
+      <td class="change">
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+        {{ if $.abstracts }}{{ with .Params.summary | default .Summary }}<span class="abs">{{ . | plainify }}</span>{{ end }}{{ end }}
+      </td>
+      <td class="cat">{{ with .Params.categories }}{{ index . 0 }}{{ end }}</td>
+      <td class="len">{{ .ReadingTime }}</td>
+    </tr>
+    {{ end }}
+  </tbody>
+</table>

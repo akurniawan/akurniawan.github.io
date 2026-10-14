@@ -1,0 +1,6 @@
+{{/* Application-note number for a post: its position among published posts, oldest = 001. */}}
+{{ $n := 0 }}
+{{ range $i, $p := (where site.RegularPages "Section" "posts").ByDate }}
+{{ if eq $p.RelPermalink $.RelPermalink }}{{ $n = add $i 1 }}{{ end }}
+{{ end }}
+{{ return printf "%03d" $n }}

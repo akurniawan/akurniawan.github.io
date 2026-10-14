@@ -1,6 +1,4 @@
 <h{{ .Level }} id="{{ .Anchor }}">
-  {{- if ge .Level 2 -}}
-  <a class="hash" href="#{{ .Anchor }}" aria-hidden="true" tabindex="-1">{{ strings.Repeat .Level "#" }}</a>
-  {{- end -}}
+  {{- if ge .Level 2 }}<a class="sect" href="#{{ .Anchor }}" aria-label="Link to this section">§</a>{{ end -}}
   {{ .Text }}
 </h{{ .Level }}>

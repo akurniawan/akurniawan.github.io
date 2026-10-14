@@ -37,8 +37,8 @@ params:
   # Author information (simplified for Typo theme)
   author: "Aditya Kurniawan"
 
-  # Short handle shown as the header brand and next to the name on the homepage
-  brand: "akur"
+  # Part number shown in the masthead; the site is laid out as its datasheet
+  partNumber: "AK-1"
 
   # Social links
   social:

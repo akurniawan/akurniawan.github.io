@@ -1,39 +1,155 @@
 {{ define "main" }}
 {{ $posts := where site.RegularPages "Section" "posts" }}
+{{ $asc := $posts.ByDate }}
+{{ $pn := site.Params.partNumber | default "AK-1" }}
 
-<section class="section hero">
-  <p class="label"><span class="sigil">~</span> whoami</p>
-  <h1>{{ site.Params.author }}<span class="aka">({{ site.Params.brand | default "akur" }})</span></h1>
+{{/* Everything numeric below is computed from the published posts at build time. */}}
+{{ $times := slice }}{{ $words := slice }}{{ $gaps := slice }}
+{{ range $posts }}{{ $times = $times | append .ReadingTime }}{{ $words = $words | append .WordCount }}{{ end }}
+{{ $longest := 0 }}{{ $longFrom := "" }}{{ $longTo := "" }}
+{{ range $i, $p := $asc }}
+{{ if gt $i 0 }}
+{{ $prev := index $asc (sub $i 1) }}
+{{ $d := div (sub $p.Date.Unix $prev.Date.Unix) 86400 }}
+{{ $gaps = $gaps | append $d }}
+{{ if gt $d $longest }}{{ $longest = $d }}{{ $longFrom = $prev.Date.Format "2006-01-02" }}{{ $longTo = $p.Date.Format "2006-01-02" }}{{ end }}
+{{ end }}
+{{ end }}
 
-  <div class="intro">
-    {{ .Content }}
+{{/* Trace data for js/ak1.js. */}}
+{{ $data := slice }}
+{{ range $asc }}
+{{ $data = $data | append (dict
+  "an" (partialCached "sheet/an.html" . .RelPermalink)
+  "title" .Title
+  "url" .RelPermalink
+  "date" (.Date.Format "2006-01-02")
+  "t" .ReadingTime
+  "words" .WordCount
+  "lane" (index (.Params.categories | default (slice "misc")) 0)
+  "tags" (.Params.tags | default slice)
+  "abs" (.Params.summary | default .Summary | plainify)
+) }}
+{{ end }}
+<script type="application/json" id="trace-data">{{ $data | jsonify | safeJS }}</script>
+
+{{ $desc := .Params.description | default site.Params.description }}
+{{ $parts := split $desc ". " }}
+<section class="hero">
+  <div>
+    <p class="id">{{ $pn }} · <b>{{ site.Params.author }}</b> · {{ len $posts }} notes since {{ with index $asc 0 }}{{ .Date.Year }}{{ end }}</p>
+    <h1>{{ index $parts 0 }}.{{ with after 1 $parts }}<span class="rest"> {{ delimit . ". " }}</span>{{ end }}</h1>
   </div>
-
-  {{ $tags := slice }}
-  {{ range first 14 site.Taxonomies.tags.ByCount }}{{ $tags = $tags | append .Name }}{{ end }}
-  {{ partial "chips.html" (dict "tags" $tags) }}
-
-  <ul class="links">
-    {{ range site.Params.social }}
-    <li><a href="{{ .url | safeURL }}" {{ if not (hasPrefix .url "mailto:") }}target="_blank" rel="noopener noreferrer me"{{ end }}><span class="br">[</span>{{ .name }}<span class="br">]</span></a></li>
-    {{ end }}
-    {{ with .OutputFormats.Get "rss" }}
-    <li><a href="{{ .RelPermalink }}"><span class="br">[</span>rss<span class="br">]</span></a></li>
-    {{ end }}
-  </ul>
+  <div class="intro">{{ .Content }}</div>
 </section>
 
-<section class="section">
-  <h2 class="prompt"><span class="sigil">$</span>ls -t posts/ | head</h2>
-  <ul class="rows">
-    {{ range first 10 $posts }}
-    {{ partial "post-row.html" (dict "page" .) }}
-    {{ end }}
-  </ul>
-  {{ if gt (len $posts) 10 }}
-  <a class="more" href="{{ "/posts/" | relURL }}">… {{ sub (len $posts) 10 }} more &rarr;</a>
-  {{ else }}
-  <a class="more" href="{{ "/posts/" | relURL }}">all posts by category &rarr;</a>
+<div class="bench-grid">
+  <section class="panel trace" aria-labelledby="trace-h">
+    <div class="panel-h">
+      <span class="t" id="trace-h"><span class="dot"></span>trace · posts/</span>
+      <span class="chipset" role="group" aria-label="Time range">
+        <button class="chip" type="button" data-range="all" aria-pressed="true">all</button>
+        <button class="chip" type="button" data-range="2025">2025→</button>
+        <button class="chip" type="button" data-range="90">90 d</button>
+      </span>
+    </div>
+    <div class="trace-canvas" data-trace>
+      <canvas aria-label="Timeline of every post, one lane per category" role="img"></canvas>
+      <div class="trace-tip" aria-hidden="true"></div>
+      <noscript><p class="trace-noscript">The trace needs JavaScript. The same documents are listed in the revision history below.</p></noscript>
+    </div>
+    <div class="trace-sum" data-trace-sum>
+      <span>spans <b>{{ len $posts }}</b></span>
+      <span>window <b>{{ with index $asc 0 }}{{ .Date.Format "2006-01" }}{{ end }} → {{ with index $asc (sub (len $asc) 1) }}{{ .Date.Format "2006-01" }}{{ end }}</b></span>
+      {{ if $gaps }}{{ $g := partial "sheet/stats.html" $gaps }}
+      <span>median gap <b>{{ $g.typ }} d</b></span>
+      <span>longest idle <b class="acc">{{ lang.FormatNumber 0 $longest }} d</b> ({{ $longFrom }} → {{ $longTo }})</span>
+      {{ end }}
+      <span class="hint">width ∝ read time · <kbd>j</kbd>/<kbd>k</kbd> step · pinch or ctrl+wheel zoom</span>
+    </div>
+  </section>
+
+  {{ with index $asc (sub (len $asc) 1) }}
+  <section class="panel inspector" aria-labelledby="insp-h" data-inspector>
+    <div class="panel-h">
+      <span class="t" id="insp-h"><span class="dot"></span>inspector</span>
+      <span data-insp="pos">{{ len $asc }} / {{ len $asc }}</span>
+    </div>
+    <div class="panel-b">
+      <p class="insp-an">AN-<span data-insp="an">{{ partialCached "sheet/an.html" . .RelPermalink }}</span> · <span data-insp="lane">{{ with .Params.categories }}{{ index . 0 }}{{ end }}</span></p>
+      <h2 class="insp-title"><a data-insp="link" href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
+      <p class="insp-abs" data-insp="abs">{{ .Params.summary | default .Summary | plainify }}</p>
+      <dl class="kv">
+        <dt>published</dt><dd data-insp="date">{{ .Date.Format "2006-01-02" }}</dd>
+        <dt>length</dt><dd><span data-insp="t">{{ .ReadingTime }}</span> min · <span data-insp="words">{{ lang.FormatNumber 0 .WordCount }}</span> words</dd>
+        <dt>terms</dt><dd data-insp="tags">{{ delimit (.Params.tags | default slice) ", " }}</dd>
+      </dl>
+      <p class="insp-open"><a data-insp="open" href="{{ .RelPermalink }}">open note <kbd>↵</kbd></a></p>
+    </div>
+  </section>
   {{ end }}
-</section>
+</div>
+
+<div class="bench-grid">
+  {{ $bm := site.GetPage "/posts/how-i-benchmark" }}
+  <section class="panel bench" aria-labelledby="bench-h" data-bench data-ref="{{ with $bm }}AN-{{ partialCached "sheet/an.html" . .RelPermalink }}{{ else }}the benchmarking note{{ end }}">
+    <div class="panel-h">
+      <span class="t" id="bench-h"><span class="dot"></span>bench · this device</span>
+      <span class="bench-ctl">
+        <span class="bench-state" data-bench-state>idle</span>
+        <button class="chip" type="button" data-bench-run>run</button>
+      </span>
+    </div>
+    <div class="panel-b">
+      <p class="desc">
+        The row-versus-column walk from {{ with $bm }}<a href="{{ .RelPermalink }}">AN-{{ partialCached "sheet/an.html" . .RelPermalink }}</a>{{ else }}the benchmarking note{{ end }},
+        running in a worker on your device right now: a 2048 × 2048 int32 matrix (16 MiB), summed along rows and then
+        down columns, 15 interleaved samples of 4 passes each, median reported. A browser can't pin a core, so the spread
+        decides whether to believe it.
+      </p>
+      <div class="bench-rows" role="table" aria-label="Benchmark results">
+        <div class="bench-row head" role="row"><span role="columnheader">walk</span><span role="columnheader">median, scaled</span><span class="r" role="columnheader">median</span><span class="r cv" role="columnheader">cv</span></div>
+        <div class="bench-row" role="row" data-bench-row="rows"><span role="cell">rows</span><span class="bar" role="cell"><i></i></span><span class="r" role="cell" data-v>–</span><span class="r cv" role="cell" data-cv>–</span></div>
+        <div class="bench-row slow" role="row" data-bench-row="cols"><span role="cell">columns</span><span class="bar" role="cell"><i></i></span><span class="r" role="cell" data-v>–</span><span class="r cv" role="cell" data-cv>–</span></div>
+      </div>
+      <p class="bench-verdict" data-bench-verdict aria-live="polite">Waiting for the page to go idle before running.</p>
+      <p class="note">For reference, {{ with $bm }}AN-{{ partialCached "sheet/an.html" . .RelPermalink }}{{ else }}the benchmarking note{{ end }} measured columns 5.4× slower than rows on a GB10 performance core and 18× slower on an efficiency core.</p>
+      <noscript><p class="note">The bench needs JavaScript.</p></noscript>
+    </div>
+  </section>
+
+  <section class="panel" aria-labelledby="spec-h">
+    <div class="panel-h"><span class="t" id="spec-h"><span class="dot"></span>key specifications</span><span>typ = median</span></div>
+    <div class="panel-b">
+      {{ $t := partial "sheet/stats.html" $times }}
+      {{ $w := partial "sheet/stats.html" $words }}
+      <table class="dt spec">
+        <thead>
+          <tr><th scope="col">parameter</th><th class="r" scope="col">min</th><th class="r" scope="col">typ</th><th class="r" scope="col">max</th><th scope="col">unit</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>read time</td><td class="r num">{{ $t.min }}</td><td class="r num">{{ $t.typ }}</td><td class="r num">{{ $t.max }}</td><td class="unit">min</td></tr>
+          <tr><td>length</td><td class="r num">{{ lang.FormatNumber 0 $w.min }}</td><td class="r num">{{ lang.FormatNumber 0 $w.typ }}</td><td class="r num">{{ lang.FormatNumber 0 $w.max }}</td><td class="unit">words</td></tr>
+          {{ if $gaps }}{{ $g := partial "sheet/stats.html" $gaps }}
+          <tr><td>gap</td><td class="r num">{{ $g.min }}</td><td class="r num">{{ $g.typ }}</td><td class="r num">{{ lang.FormatNumber 0 $g.max }}</td><td class="unit">days</td></tr>
+          {{ end }}
+          <tr><td>index terms</td><td class="r dim">–</td><td class="r num">{{ len site.Taxonomies.tags }}</td><td class="r dim">–</td><td class="unit">tags</td></tr>
+        </tbody>
+      </table>
+      <p class="note">Over {{ len $posts }} published notes, computed at build time (<span class="num">{{ now.Format "2006-01-02" }}</span>).</p>
+    </div>
+  </section>
+</div>
+
+<div class="bench-grid">
+  <section class="panel" style="grid-column: 1 / -1" aria-labelledby="rev-h">
+    <div class="panel-h">
+      <span class="t" id="rev-h"><span class="dot"></span>revision history</span>
+      <a href="{{ "/posts/" | relURL }}">all, with abstracts →</a>
+    </div>
+    <div class="panel-b">
+      {{ partial "sheet/revtable.html" (dict "pages" (first 10 $posts)) }}
+    </div>
+  </section>
+</div>
 {{ end }}

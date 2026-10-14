@@ -1,13 +1,13 @@
 <div class="wrap">
-  <a class="brand" href="{{ "/" | relURL }}" aria-label="{{ site.Title }}, home">
-    {{- site.Params.brand | default "akur" -}}<span class="cursor" aria-hidden="true"></span>
+  <a class="mark" href="{{ "/" | relURL }}" aria-label="{{ site.Title }}, front page">
+    <svg viewBox="0 0 22 14" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M1 12H5V2H9V12H13V7H17V12H21"/></svg>
+    <span class="pn">{{ site.Params.partNumber | default "AK-1" }}</span>
+    <span class="who">{{ site.Params.author }}</span>
   </a>
-
   <nav class="nav" aria-label="Main">
-    {{- $section := .Section }}
     {{- $name := lower .Name }}
     {{- range site.Params.menu }}
-    {{- $active := or (eq .name $name) (and (eq .name "posts") (eq $section "posts")) }}
+    {{- $active := or (eq .name $name) (and (eq .name "posts") (eq $.Section "posts")) }}
     <a href="{{ .url | relURL }}" {{ if $active }}aria-current="page"{{ end }}>{{ .name }}</a>
     {{- end }}
   </nav>

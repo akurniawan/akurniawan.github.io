@@ -1,0 +1,10 @@
+{{/* min / typ (median) / max of a slice of numbers. */}}
+{{ $s := sort . }}
+{{ $n := len $s }}
+{{ $typ := 0 }}
+{{ if eq (mod $n 2) 1 }}
+{{ $typ = index $s (div $n 2) }}
+{{ else if gt $n 0 }}
+{{ $typ = div (add (index $s (sub (div $n 2) 1)) (index $s (div $n 2))) 2 }}
+{{ end }}
+{{ return dict "min" (index $s 0) "typ" $typ "max" (index $s (sub $n 1)) }}

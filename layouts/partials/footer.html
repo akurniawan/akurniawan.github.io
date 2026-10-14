@@ -1,13 +1,10 @@
 {{ $first := index (where site.RegularPages.ByDate "Section" "posts") 0 }}
 <div class="wrap">
-  <span>
-    &copy; {{ with $first }}{{ .Date.Year }}&ndash;{{ end }}{{ now.Year }} {{ lower site.Params.author }}
-  </span>
+  <span>{{ site.Params.partNumber | default "AK-1" }} · {{ .doc.doc }} · {{ .doc.rev }}</span>
   <nav aria-label="Footer">
+    <span>&copy; {{ with $first }}{{ .Date.Year }}&ndash;{{ end }}{{ now.Year }} {{ site.Params.author }}</span>
     {{ with site.Home.OutputFormats.Get "rss" }}<a href="{{ .RelPermalink }}">rss</a>{{ end }}
-    <button class="theme-key" type="button" aria-label="Change color theme">
-      :theme <span class="value">gruvbox</span>
-    </button>
+    <button class="theme-key" type="button">theme: <span class="value">bench</span></button>
     <a href="#top">top &uarr;</a>
   </nav>
 </div>

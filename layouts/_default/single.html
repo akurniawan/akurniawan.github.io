@@ -1,75 +1,103 @@
+{{ define "scrub" }}
+{{ if eq .Section "posts" }}
+<div class="scrub" data-scrub data-minutes="{{ .ReadingTime }}">
+  <div class="wrap">
+    <span class="an">AN-{{ partialCached "sheet/an.html" . .RelPermalink }}</span>
+    <div class="track" data-track aria-hidden="true"><span class="head" data-head></span><span class="scrub-tip" data-tip></span></div>
+    <span class="read" data-read><b>0%</b><span class="rest"> · {{ .ReadingTime }} min left</span></span>
+  </div>
+</div>
+{{ end }}
+{{ end }}
+
 {{ define "main" }}
 {{ $isPost := eq .Section "posts" }}
-{{ $file := "" }}
-{{ with .File }}{{ $file = path.Join .Dir .LogicalName }}{{ end }}
+{{ $hasToc := and (.Param "toc") (gt (len .Fragments.Headings) 0) }}
 
-<article class="post">
-  <header class="post-head">
-    <p class="crumb"><span class="sigil">$</span>cat
-      <a href="{{ "/" | relURL }}">~</a>/
-      {{- with .Parent }}{{ if not .IsHome }}<a href="{{ .RelPermalink }}">{{ path.Base .RelPermalink }}</a>/{{ end }}{{ end -}}
-      {{- with .File }}{{ .LogicalName }}{{ end }}
-    </p>
-
+<article class="note-grid">
+  <header class="head">
     {{ if $isPost }}
-    <h1 class="post-title">{{ .Title }}</h1>
-    {{ with .Params.summary }}<p class="post-summary">{{ . | markdownify }}</p>{{ end }}
+    {{ $fmt := "2006-01-02" }}
+    <p class="an-id"><b>AN-{{ partialCached "sheet/an.html" . .RelPermalink }}</b> · application note · {{ with .Params.categories }}{{ index . 0 }}{{ end }}</p>
+    <h1 class="an-title">{{ .Title }}</h1>
+    {{ with .Params.summary }}<p class="abstract">{{ . | markdownify }}</p>{{ end }}
 
-    <p class="post-meta">
-      {{- $fmt := "2006-01-02" -}}
-      <time datetime="{{ .Date.Format "2006-01-02T15:04:05-07:00" }}">{{ .Date.Format $fmt }}</time>
-      {{- if .Param "readTime" }}<span class="sep">·</span>{{ .ReadingTime }} min read{{ end }}
-      {{- if .Param "showWordCount" }}<span class="sep">·</span>{{ lang.FormatNumber 0 .WordCount }} words{{ end }}
-      {{- if and (.Param "showLastMod") (ne (.Lastmod.Format $fmt) (.Date.Format $fmt)) }}<span class="sep">·</span>updated {{ .Lastmod.Format $fmt }}{{ end }}
-    </p>
-
-    {{ if .Param "showTags" }}
-    {{ with .Params.tags }}{{ partial "chips.html" (dict "tags" .) }}{{ end }}
-    {{ end }}
+    <dl class="kv facts">
+      <dt>published</dt>
+      <dd><time datetime="{{ .Date.Format "2006-01-02T15:04:05-07:00" }}">{{ .Date.Format $fmt }}</time>
+        {{- if and (.Param "showLastMod") (ne (.Lastmod.Format $fmt) (.Date.Format $fmt)) }}<span class="sep">·</span>revised {{ .Lastmod.Format $fmt }}{{ end }}</dd>
+      <dt>length</dt>
+      <dd>{{ .ReadingTime }} min<span class="sep">·</span>{{ lang.FormatNumber 0 .WordCount }} words{{ with .Fragments.Headings }}{{ end }}</dd>
+      {{ with .GetTerms "categories" }}
+      <dt>application</dt>
+      <dd>{{ range $i, $c := . }}{{ if $i }}<span class="sep">/</span>{{ end }}<a href="{{ $c.RelPermalink }}">{{ lower $c.LinkTitle }}</a>{{ end }}</dd>
+      {{ end }}
+      {{ if .Param "showTags" }}{{ with .GetTerms "tags" }}
+      <dt>terms</dt>
+      <dd>{{ range $i, $t := . }}{{ if $i }}, {{ end }}<a href="{{ $t.RelPermalink }}">{{ lower $t.LinkTitle }}</a>{{ end }}</dd>
+      {{ end }}{{ end }}
+    </dl>
+    {{ else }}
+    <p class="an-id"><b>{{ site.Params.partNumber | default "AK-1" }}</b> · document</p>
+    {{ if not (strings.HasPrefix (strings.TrimSpace .RawContent) "# ") }}<h1 class="an-title">{{ .Title }}</h1>{{ end }}
     {{ end }}
   </header>
 
-  {{ if and (.Param "toc") (gt (len .Fragments.Headings) 0) }}
-  <details class="toc" open>
-    <summary>contents</summary>
-    {{ .TableOfContents }}
-  </details>
-  {{ end }}
-
-  <div class="prose">
-    {{ if and (not $isPost) (not (strings.HasPrefix (strings.TrimSpace .RawContent) "# ")) }}
-    <h1>{{ .Title }}</h1>
+  <aside class="rail">
+    {{ if $hasToc }}
+    <details class="toc" open>
+      <summary><span class="lbl">contents</span></summary>
+      {{ .TableOfContents }}
+    </details>
     {{ end }}
-    {{ .Content }}
-  </div>
+  </aside>
 
-  {{ if and $isPost (not (.Param "hidePagination")) }}
-  {{ with or .PrevInSection .NextInSection }}
-  <nav class="post-nav" aria-label="More posts">
-    {{ with $.PrevInSection }}
-    <a class="prev" href="{{ .RelPermalink }}"><span class="dir">&larr; older</span><span class="t">{{ .Title }}</span></a>
+  <div class="body">
+    <div class="prose">
+      {{ .Content }}
+    </div>
+
+    {{ if $isPost }}
+    {{ with first 3 (site.RegularPages.Related .) }}
+    <section class="related panel" aria-labelledby="rel-h">
+      <div class="panel-h"><span class="t" id="rel-h"><span class="dot"></span>related notes</span></div>
+      <div class="panel-b">
+        <table class="dt rev">
+          <tbody>
+            {{ range . }}
+            <tr>
+              <td class="an">{{ partialCached "sheet/an.html" . .RelPermalink }}</td>
+              <td class="change"><a href="{{ .RelPermalink }}">{{ .Title }}</a></td>
+              <td class="len">{{ .ReadingTime }} min</td>
+            </tr>
+            {{ end }}
+          </tbody>
+        </table>
+      </div>
+    </section>
     {{ end }}
-    {{ with $.NextInSection }}
-    <a class="next" href="{{ .RelPermalink }}"><span class="dir">newer &rarr;</span><span class="t">{{ .Title }}</span></a>
+
+    {{ if not (.Param "hidePagination") }}
+    {{ with or .PrevInSection .NextInSection }}
+    <nav class="seq" aria-label="Adjacent notes">
+      {{ with $.PrevInSection }}
+      <a class="prev" href="{{ .RelPermalink }}" data-key-prev><span class="dir">← AN-{{ partialCached "sheet/an.html" . .RelPermalink }}</span><span class="t">{{ .Title }}</span></a>
+      {{ end }}
+      {{ with $.NextInSection }}
+      <a class="next" href="{{ .RelPermalink }}" data-key-next><span class="dir">AN-{{ partialCached "sheet/an.html" . .RelPermalink }} →</span><span class="t">{{ .Title }}</span></a>
+      {{ end }}
+    </nav>
     {{ end }}
-  </nav>
-  {{ end }}
-  {{ end }}
+    {{ end }}
+    {{ end }}
 
-  {{ if .Store.Get "hasMermaid" }}
-  {{ $mermaidDarkTheme := default "dark" (or .Params.mermaidDarkTheme .Site.Params.mermaidDarkTheme) }}
-  {{ $mermaidTheme := default "default" (or .Params.mermaidTheme .Site.Params.mermaidTheme) }}
-  <script defer type="module" id="mermaid_script"
-    data-light-theme="{{ $mermaidTheme }}" data-dark-theme="{{ $mermaidDarkTheme }}"
-    src='{{ "js/mermaid.js" | relURL }}'></script>
-  {{ end }}
-
-  <div class="statusline" aria-hidden="true">
-    <span class="mode" data-mode="NORMAL">NORMAL</span>
-    <span class="file">{{ $file | default .RelPermalink }}</span>
-    {{ with .Params.tags }}<span class="ft">{{ index . 0 }}</span>{{ end }}
-    <span class="enc">utf-8</span>
-    <span class="pos">Top</span>
+    {{ if .Store.Get "hasMermaid" }}
+    {{ $mermaidDarkTheme := default "dark" (or .Params.mermaidDarkTheme .Site.Params.mermaidDarkTheme) }}
+    {{ $mermaidTheme := default "default" (or .Params.mermaidTheme .Site.Params.mermaidTheme) }}
+    <script defer type="module" id="mermaid_script"
+      data-light-theme="{{ $mermaidTheme }}" data-dark-theme="{{ $mermaidDarkTheme }}"
+      src='{{ "js/mermaid.js" | relURL }}'></script>
+    {{ end }}
   </div>
 </article>
 {{ end }}

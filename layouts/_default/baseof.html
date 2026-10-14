@@ -3,26 +3,23 @@
   dir="{{ or site.Language.LanguageDirection `ltr` }}">
 
 <head>
-  {{/* Set the palette before first paint. Saved choice wins, else the OS preference. */}}
+  {{/* Apply a saved theme before first paint. Default is the dark "bench" palette. */}}
   <script>
-    (function () {
-      var t;
-      try { t = localStorage.getItem("theme"); } catch (e) {}
-      if (["gruvbox", "paper", "nord"].indexOf(t) < 0) {
-        t = matchMedia("(prefers-color-scheme: light)").matches ? "paper" : "gruvbox";
-      }
-      document.documentElement.dataset.theme = t;
-    })();
+    try { if (localStorage.getItem("theme") === "paper") document.documentElement.dataset.theme = "paper"; } catch (e) {}
   </script>
   {{ partial "head.html" . }}
 </head>
 
-<body id="top">
-  <a class="sr-only" href="#content">skip to content</a>
+{{ $doc := partial "sheet/doc.html" . }}
 
-  <header class="site-header">
+<body id="top">
+  <a class="sr-only" href="#content">Skip to content</a>
+
+  <header class="topbar">
     {{ partial "header.html" . }}
   </header>
+
+  {{ block "scrub" . }}{{ end }}
 
   <main class="main" id="content">
     <div class="wrap">
@@ -33,15 +30,34 @@
   {{/* Body end hook */}}
   {{ partial "functions/get_hook.html" (dict "hook" "body_end" "context" .) }}
 
-  <footer class="site-footer">
-    {{ partial "footer.html" . }}
+  <footer class="colophon">
+    {{ partial "footer.html" (dict "page" . "doc" $doc) }}
   </footer>
+
+  {{ partial "sheet/hud.html" . }}
+
+  <div class="keyhelp" role="dialog" aria-modal="true" aria-labelledby="keyhelp-t" hidden>
+    <div class="panel">
+      <div class="panel-h"><span class="t" id="keyhelp-t"><span class="dot"></span>Keys</span><button type="button" data-close>esc</button></div>
+      <div class="panel-b">
+        <table>
+          <tr><td><kbd>j</kbd> <kbd>k</kbd></td><td>Select older / newer note (front panel, lists)</td></tr>
+          <tr><td><kbd>↵</kbd></td><td>Open the selected document</td></tr>
+          <tr><td><kbd>g</kbd> <kbd>h</kbd></td><td>Go to the front page</td></tr>
+          <tr><td><kbd>g</kbd> <kbd>p</kbd></td><td>Go to the revision history</td></tr>
+          <tr><td><kbd>[</kbd> <kbd>]</kbd></td><td>Previous / next section (in a note)</td></tr>
+          <tr><td><kbd>t</kbd></td><td>Switch theme (bench / paper)</td></tr>
+          <tr><td><kbd>?</kbd></td><td>Show or hide this panel</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
 
   {{ if .Param "math" }}
   {{ partialCached "math.html" . }}
   {{ end }}
 
-  <script src="{{ "js/terminal.js" | relURL }}"></script>
+  <script src="{{ "js/ak1.js" | relURL }}"></script>
   <script defer src="{{ "js/copy-code.js" | relURL }}"></script>
 </body>
 </html>
