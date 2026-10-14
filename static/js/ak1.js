@@ -194,6 +194,19 @@
       drawVis();
     }
 
+    // GoatCounter skips browsers that opened the site with #toggle-goatcounter
+    // (it sets localStorage skipgc = "t"). Say so, so the owner can check it worked.
+    if (store("skipgc") === "t") {
+      var visCell = $(".cell.vis", hud);
+      if (visCell) {
+        var tag = document.createElement("span");
+        tag.className = "u";
+        tag.textContent = " · not counting you";
+        $(".v", visCell).appendChild(tag);
+        visCell.title += " This browser is excluded from the counts (open the site with #toggle-goatcounter to undo).";
+      }
+    }
+
     var savedRatio = store("ak1-bench");
     if (savedRatio) hudSet("bench", savedRatio + "×");
   }
